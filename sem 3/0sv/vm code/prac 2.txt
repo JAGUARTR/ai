@@ -1,0 +1,192 @@
+$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ chmod +x script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Welcome to Shell Programming
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ 
+
+
+
+
+full terminal 
+
+
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ chmod +x script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+./script.sh: line 2: echoWelcome to Shell Programming: command not found
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ chmod +x script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+./script.sh: line 2: echoWelcome to Shell Programming: command not found
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ chmod +x script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Welcome to Shell Programming
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ^C
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your name:
+prasanna gaekwad
+Welcome prasanna gaekwad
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+5
+PosiƟve Number
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+-6
+Zero or NegaƟve Number
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+-2
+Zero or NegaƟve Number
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+-3
+Zero or NegaƟve Number
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+2
+2 is Even
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+5
+5 is Odd
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter username:
+admin
+Enter password:
+1234
+./script.sh: line 11: syntax error: unexpected end of file from `if' command on line 6
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter username:
+admin
+Enter password:
+1234
+./script.sh: line 11: syntax error: unexpected end of file from `if' command on line 6
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter username:
+admin
+Enter password:
+1234
+Login Successfull
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter username:
+rutr
+Enter password:
+3333
+Invalid Username or Password
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+1
+2
+3
+4
+5
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+1
+2
+3
+4
+5
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+1
+2
+3
+4
+5
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+1 is Odd
+2 is Even
+3 is Odd
+4 is Even
+5 is Odd
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+5
+5 x 1 = 5
+5 x 2 = 10
+5 x 3 = 15
+5 x 4 = 20
+5 x 5 = 25
+5 x 6 = 30
+5 x 7 = 35
+5 x 8 = 40
+5 x 9 = 45
+5 x 10 = 50
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+1
+2
+3
+4
+5
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter the number of terms:
+9
+0
+1
+1
+2
+3
+5
+8
+13
+21
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+4
+Sum = 10
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+7
+Factorial = 5040
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter a number:
+9
+Factorial = 362880
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your marks:
+90
+Grade: A+
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your marks:
+70
+Grade: B
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your marks:
+60
+Grade: C
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your marks:
+40
+Grade: D (Pass)
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your marks:
+35
+Grade: F (Fail)
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ nano script.sh
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your choice (1-3):
+1
+You selected OpƟon 1
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ ./script.sh
+Enter your choice (1-3):
+4
+Invalid Choice
+prasanna04@prasanna04-VMware-Virtual-Platform:~/OS_Practical$ 

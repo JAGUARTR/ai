@@ -1,0 +1,113 @@
+A ] parent and child process 
+
+#include <stdio.h>
+#include <unistd.h>
+int main()
+{
+pid_t pid;
+pid = fork();
+if (pid < 0)
+{
+printf("Process creaƟon failed.\n");
+}
+else if (pid == 0)
+{
+printf("\n----- Child Process -----\n");
+printf("Child Process ID (PID): %d\n", getpid());
+printf("Parent Process ID (PPID): %d\n", getppid());
+printf("Child process is execuƟng...\n");
+printf("Child process completed.\n");
+}
+else
+{
+printf("\n----- Parent Process -----\n");
+printf("Parent Process ID (PID): %d\n", getpid());
+printf("Child Process ID: %d\n", pid);
+printf("Parent process is execuƟng...\n");
+printf("Parent process completed.\n");
+}
+return 0;
+}
+
+
+b ] orphan process
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main()
+{
+    pid_t pid = fork();
+
+    if (pid < 0)
+    {
+        printf("Fork failed.\n");
+    }
+    else if (pid == 0)
+    {
+        printf("\n----- Child Process -----\n");
+        printf("Child PID : %d\n", getpid());
+        printf("Initial Parent PPID : %d\n", getppid());
+
+        sleep(5);   // Wait for parent to terminate
+
+        printf("\nAfter Parent Terminates...\n");
+        printf("Child PID : %d\n", getpid());
+        printf("New Parent PPID : %d\n", getppid());
+        printf("Child has become an Orphan Process.\n");
+    }
+    else
+    {
+        printf("\n----- Parent Process -----\n");
+        printf("Parent PID : %d\n", getpid());
+        printf("Child PID : %d\n", pid);
+        printf("Parent is terminating...\n");
+        exit(0);
+    }
+
+    return 0;
+}
+
+c ] zombie process
+                                                                                              
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main()
+{
+    pid_t pid;
+    pid = fork();
+
+    if (pid < 0)
+    {
+        printf("Process creation failed.\n");
+    }
+    else if (pid == 0)
+    {
+        printf("\n----- Child Process -----\n");
+        printf("Child Process ID (PID): %d\n", getpid());
+        printf("Child process is terminating...\n");
+        exit(0);
+    }
+    else
+    {
+        printf("\n----- Parent Process -----\n");
+        printf("Parent Process ID (PID): %d\n", getpid());
+        printf("Child Process ID: %d\n", pid);
+        printf("Parent process is sleeping...\n");
+        sleep(15);
+        printf("Parent process completed.\n");
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+                                                                                         

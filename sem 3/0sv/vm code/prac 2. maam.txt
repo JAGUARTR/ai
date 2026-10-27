@@ -1,0 +1,206 @@
+# prac 2
+Step 1: Open the Terminal
+Step 2: Create a Shell Script
+nano script.sh
+Step 3: Write a Simple Shell Program
+#!/bin/bash
+echo "Welcome to Shell Programming"
+Save the file.
+ Press Ctrl + S and Press Ctrl + X to exit.
+
+
+Step 4: Give Execute Permission
+chmod +x script.sh
+Step 5: Execute the Script
+./script.sh
+
+
+Input and Output using read
+Step 6: Edit the Script
+nano script.sh
+Replace the contents with:
+#!/bin/bash
+echo "Enter your name:"
+read name
+echo "Welcome $name"
+Save and exit.
+Run the script:
+./script.sh
+
+
+To Check posiƟve or negaƟve using if-else
+#!/bin/bash
+echo "Enter a number:"
+read num
+if [ $num -gt 0 ]
+then
+echo "PosiƟve Number"
+else
+echo "Zero or NegaƟve Number"
+fi
+
+To Check Even or Odd using if-else
+#!/bin/bash
+echo "Enter a number:"
+read n
+if [ $((n % 2)) -eq 0 ]
+then
+echo "$n is Even"
+else
+echo "$n is Odd"
+fi
+
+
+E)	Login Check using if-else
+
+#!/bin/bash
+echo "Enter username:"
+read user
+echo "Enter password:"
+read pass
+if [ "$user" = "admin" ] && [ "$pass" = "1234" ]
+then
+echo "Login Successful"
+else
+echo "Invalid Username or Password"
+fi
+
+
+
+F)	Looping using for (sh)
+
+#!/bin/sh
+for i in 1 2 3 4 5
+do
+echo $i
+done
+
+
+G)	Looping using for – brace range (bash
+
+#!/bin/bash
+for i in {1..5}
+do
+echo $i
+done
+
+
+H)	Looping using for – C-style (bash)
+
+#!/bin/bash
+for ((i=1; i<=5; i++)) 
+do
+echo $i 
+done
+
+I ]    Check Even or Odd
+sh
+#!/bin/sh
+
+for i in 1 2 3 4 5
+do
+if [ $((i % 2)) -eq 0 ]
+then
+echo "$i is Even"
+
+else
+echo "$i is Odd"
+fi
+done
+
+Print MulƟplicaƟon Table
+#!/bin/sh
+echo "Enter a number:"
+read n
+for i in 1 2 3 4 5 6 7 8 9 10
+do
+echo "$n x $i = $((n * i))"
+done
+
+
+Looping using while
+#!/bin/bash
+i=1
+while [ $i -le 5 ]
+do
+echo $i
+i=$((i+1))
+done
+Fibonacci Series
+#!/bin/sh
+echo "Enter the number of terms:"
+read n
+a=0
+b=1
+i=1
+while [ $i -le $n ]
+do
+echo $a
+c=$((a + b))
+a=$b
+b=$c
+i=$((i + 1))
+done
+
+M)	Sum of First N Numbers
+
+#!/bin/sh
+echo "Enter a number:"
+read n
+i=1
+sum=0
+while [ $i -le $n ]
+do
+sum=$((sum + i))
+i=$((i + 1))
+done
+echo "Sum = $sum"
+
+Factorial of a Number
+#!/bin/sh
+echo "Enter a number:"
+read n
+fact=1
+i=1
+while [ $i -le $n ]
+do
+fact=$((fact * i))
+i=$((i + 1))
+done
+echo "Factorial = $fact"
+
+O)	Multi-Level Branching using Nested if-else
+
+#!/bin/bash
+echo "Enter your marks:"
+read marks
+if [ $marks -ge 90 ]
+then
+echo "Grade: A+"
+elif [ $marks -ge 80 ]
+then
+echo "Grade: A"
+elif [ $marks -ge 70 ]
+then
+echo "Grade: B"
+elif [ $marks -ge 60 ]
+then
+echo "Grade: C"
+elif [ $marks -ge 40 ]
+then
+echo "Grade: D (Pass)"
+else
+echo "Grade: F (Fail)"
+fi
+
+MulƟ-Level Branching using case
+#!/bin/bash
+echo "Enter your choice (1-3):"
+read choice
+case $choice in
+1) echo "You selected OpƟon 1";;
+2) echo "You selected OpƟon 2";;
+3) echo "You selected OpƟon 3";;
+*) echo "Invalid Choice";;
+
+esac

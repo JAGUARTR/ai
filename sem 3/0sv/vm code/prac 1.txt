@@ -1,0 +1,92 @@
+# prac 1 
+Procedure
+1.	Open the Terminal (Ctrl + Alt + T).
+2.	Display the current working directory: pwd
+3.	List the files and directories: ls and ls -l
+4.	Create a new directory: mkdir OS_Practical
+5.	Move to the newly created directory: cd OS_Practical
+6.	Create an empty file: touch file1.txt
+7.	Write text into the file: echo "Operating Systems Practical" > file1.txt
+8.	Display the contents of the file: cat file1.txt
+9.	Create a copy of the file: cp file1.txt backup.txt
+10.	Rename the copied file: mv backup.txt newfile.txt
+11.	Delete the renamed file: rm newfile.txt
+12.	Display detailed information of the file: stat file1.txt
+13.	Change the file permission: chmod +x file1.txt and verify using ls -l
+14.	Display the current date and time: date
+15.	Display the current logged-in user: whoami
+16.	Display system information: uname -a
+17.	Display running processes: ps, and monitor them using top (press q to exit)
+18.	Search for all text files: find . -name "*.txt"
+19.	Count the lines, words and characters: wc file1.txt
+20.	Display the command history: history
+
+
+
+Procedure
+Step 1: Open the Terminal (Ctrl + Alt + T).
+
+Step 2: Display the current working directory using:
+pwd
+
+Step 3: List the files and directories using:
+ls
+ls -l
+
+Step 4: Create a new directory:
+mkdir OS_Practical
+
+Step 5: Move to the newly created directory:
+cd OS_Practical
+
+Step 6: Create an empty file:
+touch file1.txt
+
+Step 7: Write text into the file:
+echo "Operating Systems Practical" > file1.txt
+
+Step 8: Display the contents of the file:
+cat file1.txt
+
+Step 9: Create a copy of the file:
+cp file1.txt backup.txt
+
+Step 10: Rename the copied file:
+mv backup.txt newfile.txt
+
+
+
+Step 11: Delete the renamed file:
+rm newfile.txt
+
+Step 12: Display detailed information of the file:
+stat file1.txt
+
+Step 13: Change the file permission:
+chmod +x file1.txt
+Verify using:
+ls -l
+
+Step 14: Display the current date and time:
+date
+
+Step 15: Display the current logged-in user:
+whoami
+
+Step 16: Display system information:
+uname -a
+
+Step 17: Display running processes:
+ps
+
+Monitor processes using:
+top (Press q to exit)
+
+Step 18: Search for all text files:
+find . -name "*.txt"
+
+Step 19: Count the lines, words and characters:
+wc file1.txt
+
+Step 20: Display the command history:
+history
