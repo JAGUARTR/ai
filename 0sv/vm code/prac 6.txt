@@ -1,0 +1,63 @@
+parellel thread management [pthread]
+
+
+#include <stdio.h>
+#include <pthread.h>
+
+int arr[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50};
+int key = 25;
+
+void *searchFirstHalf(void *arg)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        if (arr[i] == key)
+        {
+            printf("Thread 1: Element %d found at index %d\n", key, i);
+            pthread_exit(NULL);
+        }
+    }
+    printf("Thread 1: Element not found.\n");
+    pthread_exit(NULL);
+}
+
+void *searchSecondHalf(void *arg)
+{
+    for (int i = 5; i < 10; i++)
+    {
+        if (arr[i] == key)
+        {
+            printf("Thread 2: Element %d found at index %d\n", key, i);
+            pthread_exit(NULL);
+        }
+    }
+    printf("Thread 2: Element not found.\n");
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    pthread_t t1, t2;
+
+    pthread_create(&t1, NULL, searchFirstHalf, NULL);
+    pthread_create(&t2, NULL, searchSecondHalf, NULL);
+
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    printf("Search completed.\n");
+    return 0;
+}
+
+
+
+Step 1: Open the Terminal.
+Press Ctrl + Alt + T.
+Step 2: Create a C program.
+nano search.c
+Step 3: Type the following program.
+Step 4: Save the file.
+Step 5: Compile the program.
+gcc search.c -o search -pthread
+Step 6: Execute the program.
+./search

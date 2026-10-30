@@ -1,0 +1,37 @@
+# prac 9
+
+Steps
+Step 1: Open VMware WorkstaƟon
+1. Open VMware WorkstaƟon 17 Player.
+2. Click Create a New Virtual Machine.
+Step 2: Select Ubuntu ISO
+1. Select Installer disc image file (ISO).
+2. Browse and select the Ubuntu ISO file.
+3. Click Next.
+Step 3: Configure the Virtual Machine
+Step 4: Create the Virtual Machine
+1. Review the configuraƟon.
+2. Click Finish.
+3. The Ubuntu virtual machine will be created.
+Step 5: Start the Virtual Machine
+1. Select the Ubuntu VM.
+2. Click Play Virtual Machine.
+3. Ubuntu will start from the ISO file.
+Step 6: Install Ubuntu
+1. Select Install Ubuntu.
+2. Follow the installaƟon instrucƟons.
+3. Create a username and password.
+4. Complete the installaƟon.
+5. Restart the virtual machine when prompted.
+
+
+
+
+Commands for VerificaƟon
+Open the Ubuntu Terminal and execute:
+1. Check CPU informaƟon
+lscpu - It displays the CPU informaƟon available to the virtual machine.
+2. Check memory
+free -h - It displays the total, used and available RAM.
+3. Check operaƟng system/kernel
+uname -a - It displays informaƟon about the Linux kernel and system.
