@@ -1,0 +1,35 @@
+#2a States that have a city called BOSTON
+
+db.zipcodes.aggregate([
+  { $match: { city: "BOSTON" } },
+  { $group: { _id: "$state" } },
+  { $project: { _id: 0, state: "$_id" } }
+])
+
+#2a (second part). Cities containing “BOST”
+
+db.zipcodes.aggregate([
+  { $match: { city: { $regex: "BOST", $options: "i" } } },
+  { $group: { _id: { state: "$state", city: "$city" } } },
+  { $project: { _id: 0, state: "$_id.state", city: "$_id.city" } },
+  { $sort: { state: 1, city: 1 } }
+])
+
+#2b  City with the most ZIP codes in each state, ranked by population
+
+db.zipcodes.aggregate([
+  { $group: {
+      _id: { state: "$state", city: "$city" },
+      zipCodes: { $sum: 1 },
+      population: { $sum: "$pop" }
+  }},
+  { $sort: { "_id.state": 1, zipCodes: -1 } },
+  { $group: {
+      _id: "$_id.state",
+      city: { $first: "$_id.city" },
+      zipCodes: { $first: "$zipCodes" },
+      population: { $first: "$population" }
+  }},
+  { $sort: { population: -1 } },
+  { $project: { _id: 0, state: "$_id", city: 1, zipCodes: 1, population: 1 } }
+])

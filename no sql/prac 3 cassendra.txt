@@ -1,0 +1,258 @@
+==========================================================
+ PRACTICAL: APACHE CASSANDRA - CAR DATABASE, CONSISTENCY
+ AND REPLICATION  (Windows, no Docker)
+==========================================================
+
+SETUP USED
+  Java            : JDK 8 (jdk1.8.0_511)
+  Java path       : C:\Program Files\Java\jdk1.8.0_511
+  Cassandra       : 3.11.17 (has cassandra.bat; 5.0.x does NOT)
+  Cassandra path  : D:\cassandra\apache-cassandra-3.11.17
+  CQL shell       : pip package "cqlsh" on Python 3.13
+
+IMPORTANT
+  - You need TWO Command Prompt windows.
+  - Window 1 = Cassandra server (Administrator). Never close it.
+  - Window 2 = cqlsh (normal CMD is fine).
+  - Do NOT type the ">" shown in prompts. Type only the command.
+
+
+==========================================================
+ STEP 1: INSTALL JDK 8
+==========================================================
+Download Temurin / Oracle JDK 8 (Windows x64) and install.
+Install location: C:\Program Files\Java\jdk1.8.0_511
+(Your Java 17 can stay installed.)
+
+
+==========================================================
+ STEP 2: DOWNLOAD AND EXTRACT CASSANDRA 3.11.17
+==========================================================
+Download : apache-cassandra-3.11.17-bin.tar.gz
+From     : https://archive.apache.org/dist/cassandra/3.11.17/
+Extract with 7-Zip (Extract Here twice: .tar.gz -> .tar -> folder)
+Final folder:
+
+  D:\cassandra\apache-cassandra-3.11.17
+
+Check that this file exists:
+
+  D:\cassandra\apache-cassandra-3.11.17\bin\cassandra.bat
+
+
+==========================================================
+ STEP 3: FIX THE SIGAR CRASH (ONE TIME ONLY)
+==========================================================
+Problem : Cassandra crashes with EXCEPTION_ACCESS_VIOLATION in
+          sigar-amd64-winnt.dll
+Fix     : rename that DLL.
+
+Open File Explorer and go to:
+
+  D:\cassandra\apache-cassandra-3.11.17\lib\sigar-bin
+
+Rename:
+
+  sigar-amd64-winnt.dll   -->   sigar-amd64-winnt.dll.bak
+
+(Or in an Administrator CMD:)
+
+  ren "D:\cassandra\apache-cassandra-3.11.17\lib\sigar-bin\sigar-amd64-winnt.dll" sigar-amd64-winnt.dll.bak
+
+
+==========================================================
+ STEP 4: START CASSANDRA  (WINDOW 1 - ADMINISTRATOR)
+==========================================================
+Start -> type cmd -> "Run as administrator" -> Yes.
+
+Run these one at a time:
+
+  set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_511
+
+  set PATH=%JAVA_HOME%\bin;%PATH%
+
+  java -version
+
+(must show 1.8.0_511)
+
+  cd /d D:\cassandra\apache-cassandra-3.11.17\bin
+
+  .\cassandra.bat -f
+
+WAIT until you see:
+  "Starting listening for CQL clients on localhost/127.0.0.1:9042"
+  "Startup complete"
+
+>>> SCREENSHOT 1: Cassandra started
+>>> KEEP THIS WINDOW OPEN. Do not press anything in it.
+
+
+==========================================================
+ STEP 5: INSTALL CQL SHELL  (WINDOW 2 - NORMAL CMD)
+==========================================================
+Start -> type cmd -> Enter.   (First time only:)
+
+  pip install cqlsh
+
+  py -3.13 -m pip install pyasyncore
+
+(pyasyncore is needed because Python 3.12+ removed asyncore.)
+
+
+==========================================================
+ STEP 6: OPEN CQLSH  (WINDOW 2)
+==========================================================
+"cqlsh" alone is not on PATH, so use the full path:
+
+  C:\Users\USER\AppData\Local\Programs\Python\Python313\Scripts\cqlsh.exe
+
+Expected:
+  Connected to Test Cluster at 127.0.0.1:9042.
+  [cqlsh 6.2.2 | Cassandra 3.11.17 | CQL spec 3.4.4 | Native protocol v4]
+  cqlsh>
+
+(The WARNING about 5.0.0 vs 3.11.17 is harmless.)
+
+From here, paste commands one group at a time.
+
+
+==========================================================
+ STEP 7: CREATE THE CAR KEYSPACE
+==========================================================
+
+  CREATE KEYSPACE car_db WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+  USE car_db;
+
+Show the keyspace (DESCRIBE does not work with this cqlsh/server
+combination, so use this query instead):
+
+  SELECT keyspace_name, replication FROM system_schema.keyspaces WHERE keyspace_name = 'car_db';
+
+>>> SCREENSHOT 2: keyspace created
+
+
+==========================================================
+ STEP 8: CREATE THE CARS TABLE
+==========================================================
+
+  CREATE TABLE cars (car_id int PRIMARY KEY, manufacturer text, type text, max_performance int, max_torque int);
+
+Show the table structure:
+
+  SELECT column_name, type, kind FROM system_schema.columns WHERE keyspace_name = 'car_db' AND table_name = 'cars';
+
+>>> SCREENSHOT 3: table created
+
+
+==========================================================
+ STEP 9: INSERT AND DISPLAY CAR DATA
+==========================================================
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (101, 'Toyota', 'Sedan', 203, 243);
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (102, 'BMW', 'Sedan', 255, 400);
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (103, 'Audi', 'SUV', 261, 370);
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (104, 'Mercedes', 'Sedan', 255, 400);
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (105, 'Ford', 'SUV', 250, 380);
+
+  SELECT * FROM cars;
+
+Expected: 5 rows (order may differ from insertion order; Cassandra
+returns rows in hash/token order, so this is normal).
+
+>>> SCREENSHOT 4: insert + select
+
+
+==========================================================
+ STEP 10: TEST CONSISTENCY LEVELS
+==========================================================
+
+  CONSISTENCY ONE;
+
+  SELECT * FROM cars;
+
+  CONSISTENCY QUORUM;
+
+  SELECT * FROM cars;
+
+  CONSISTENCY ALL;
+
+  SELECT * FROM cars;
+
+All three return 5 rows on a single node with replication_factor 1,
+because there is only one replica.
+
+>>> SCREENSHOT 5: all three consistency levels
+
+
+==========================================================
+ STEP 11: REPLICATION (EXPLANATION ONLY - 3-NODE CLUSTER)
+==========================================================
+Real replication needs a cluster of 3 nodes. The keyspace is created
+with replication factor 3, so each car record is stored as three
+copies, one on each node:
+
+  car_db -> Node 1, Node 2, Node 3
+
+If one node goes down, data can still be read from the other two
+replicas, and QUORUM (2 of 3 replicas) continues to work.
+
+Code for a 3-node cluster:
+
+  CREATE KEYSPACE car_db WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+
+  USE car_db;
+
+  CREATE TABLE cars (car_id int PRIMARY KEY, manufacturer text, type text, max_performance int, max_torque int);
+
+  INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (101, 'Toyota', 'Sedan', 203, 243);
+
+Consistency rules:
+  ONE    = 1 replica must respond (fastest)
+  QUORUM = (RF / 2) + 1 replicas; with RF 3 that is 2
+  ALL    = every replica (strongest consistency, lowest availability)
+
+
+==========================================================
+ STEP 12: STOP EVERYTHING
+==========================================================
+In cqlsh (Window 2):
+
+  exit
+
+In the Cassandra window (Window 1):
+
+  press Ctrl + C
+
+
+==========================================================
+ TROUBLESHOOTING QUICK LIST
+==========================================================
+"cassandra.bat is not recognized"
+    -> type  .\cassandra.bat -f  (with the .\ in front)
+
+"The system cannot find the path specified"
+    -> wrong folder name; run  dir  to check where you are
+
+Crash with sigar-amd64-winnt.dll
+    -> do STEP 3 (rename the DLL)
+
+"Unable to load a default connection class" / asyncore error
+    -> py -3.13 -m pip install pyasyncore
+
+"DESCRIBE ... will not work in cqlsh"
+    -> use the system_schema SELECT queries in STEP 7 and STEP 8
+
+Typed ">" or "en" instead of "ren"
+    -> type only the command, no ">", and spell it fully
+
+RESULT
+  Cassandra was installed and the car_db keyspace and cars table
+  were created. Five car records were inserted and displayed, and the
+  consistency levels ONE, QUORUM and ALL were tested successfully on
+  a single node. Replication with a replication factor of 3 was
+  studied for a three-node cluster.

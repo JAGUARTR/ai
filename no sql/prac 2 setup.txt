@@ -1,0 +1,49 @@
+http://media.mongodb.org/zips.json
+
+
+D:
+cd D:\data
+"C:\mongo-tools\bin\mongoimport.exe" --db zipcode_db --collection zipcodes --file zips.json
+
+Don’t worry, you only have two things, and you don’t need any separate file:
+
+The data: zips.json, which you saved in D:\data
+The tool: the Database Tools zip in your Downloads folder
+
+Step 1: extract the zip
+
+Open File Explorer → Downloads.
+Right-click the Database Tools zip → Extract All → Extract.
+Open the new folder, then open the bin folder inside it. You should see mongoimport.exe there.
+
+Step 2: open Command Prompt inside that bin folder
+
+While you’re inside the bin folder, click the address bar at the top of File Explorer.
+Type cmd and press Enter.
+
+A black window opens already pointed at the right folder, so you don’t have to type any folder path.
+
+Step 3: run the import
+
+In that window, paste this exactly:
+
+mongoimport.exe --db zipcode_db --collection zipcodes --file "D:\data\zips.json"
+
+You should see something like 29353 document(s) imported successfully.
+
+Step 4: check it worked
+
+Open a new Command Prompt and run:
+
+mongosh
+use zipcode_db
+db.zipcodes.countDocuments()
+
+It should print 29353.
+
+Quick check on your file: in File Explorer, open D:\data and make sure the file is named exactly zips.json and not zips.json.txt. If it’s wrong, rename it.
+
+Why this is simple: because the window opened inside the bin folder, Windows finds mongoimport.exe automatically. The only path you type is the one to your data file, D:\data\zips.json.
+
+use zipcode_db
+db.zipcodes.countDocuments()

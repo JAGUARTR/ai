@@ -1,0 +1,33 @@
+#keyspace
+CREATE KEYSPACE car_db WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+USE car_db;
+DESCRIBE KEYSPACE car_db;
+
+
+
+#table
+CREATE TABLE cars (car_id int PRIMARY KEY, manufacturer text, type text, max_performance int, max_torque int);
+DESCRIBE TABLE cars;
+
+
+#insert and display
+INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (101, 'Toyota', 'Sedan', 203, 243);
+INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (102, 'BMW', 'Sedan', 255, 400);
+INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (103, 'Audi', 'SUV', 261, 370);
+INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (104, 'Mercedes', 'Sedan', 255, 400);
+INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (105, 'Ford', 'SUV', 250, 380);
+SELECT * FROM cars;
+
+
+#consistency 
+
+CONSISTENCY ONE;
+SELECT * FROM cars;
+CONSISTENCY QUORUM;
+SELECT * FROM cars;
+CONSISTENCY ALL;
+SELECT * FROM cars;
+
+
+SELECT keyspace_name, replication FROM system_schema.keyspaces WHERE keyspace_name = 'car_db';
+SELECT column_name, type, kind FROM system_schema.columns WHERE keyspace_name = 'car_db' AND table_name = 'cars';

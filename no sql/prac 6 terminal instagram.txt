@@ -1,0 +1,598 @@
+ 10.0.26200.9711]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\USER>mongosh
+Current Mongosh Log ID: 6ae38029c93c62a87bcebea3
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.5.8
+Using MongoDB:          9.0.4
+Using Mongosh:          2.5.8
+mongosh 2.14.0 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2026-10-24T18:30:10.378+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use instagram_db
+switched to db instagram_db
+instagram_db> db.users.insertMany([
+... {
+... user_id: 1,
+... username: "simran",
+... name: "Simran Kaur",
+... email: "simran@gmail.com",
+... followers: 1200,
+... following: 350
+... },
+... {
+... user_id: 2,
+... username: "aman",
+... name: "Aman Singh",
+... email: "aman@gmail.com",
+... followers: 850,
+... following: 420
+... },
+... {
+... user_id: 3,
+... username: "priya",
+... name: "Priya Sharma",
+... email: "priya@gmail.com",
+... followers: 2100,
+... following: 500
+... },
+... {
+... user_id: 4,
+... username: "rahul",
+... name: "Rahul Kumar",
+... email: "rahul@gmail.com",
+... followers: 650,
+... following: 300
+... },
+...
+... {
+... user_id: 5,
+... username: "neha",
+... name: "Neha Verma",
+... email: "neha@gmail.com",
+... followers: 1800,
+... following: 450
+... }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae380dbc93c62a87bcebea4'),
+    '1': ObjectId('6ae380dbc93c62a87bcebea5'),
+    '2': ObjectId('6ae380dbc93c62a87bcebea6'),
+    '3': ObjectId('6ae380dbc93c62a87bcebea7'),
+    '4': ObjectId('6ae380dbc93c62a87bcebea8')
+  }
+}
+instagram_db> db.posts.insertMany([
+... {
+... post_id: 101,
+... username: "simran",
+... caption: "Beautiful day!",
+... hashtag: "#nature",
+... likes: 250,
+... comments: 30,
+... location: "Chandigarh"
+... },
+... {
+... post_id: 102,
+... username: "aman",
+... caption: "Learning MongoDB today",
+... hashtag: "#mongodb",
+... likes: 180,
+... comments: 20,
+... location: "Delhi"
+... },
+... {
+... post_id: 103,
+... username: "priya",
+... caption: "Amazing travel experience",
+... hashtag: "#travel",
+... likes: 520,
+... comments: 75,
+... location: "Manali"
+... },
+... {
+... post_id: 104,
+...
+... username: "rahul",
+... caption: "Big Data practical",
+... hashtag: "#bigdata",
+... likes: 150,
+... comments: 15,
+... location: "Amritsar"
+... },
+... {
+... post_id: 105,
+... username: "neha",
+... caption: "Beautiful sunset",
+... hashtag: "#nature",
+... likes: 430,
+... comments: 50,
+... location: "Goa"
+... },
+... {
+... post_id: 106,
+... username: "simran",
+... caption: "MongoDB practical work",
+... hashtag: "#mongodb",
+... likes: 320,
+... comments: 40,
+... location: "Chandigarh"
+... }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae380f7c93c62a87bcebea9'),
+    '1': ObjectId('6ae380f7c93c62a87bcebeaa'),
+    '2': ObjectId('6ae380f7c93c62a87bcebeab'),
+    '3': ObjectId('6ae380f7c93c62a87bcebeac'),
+    '4': ObjectId('6ae380f7c93c62a87bcebead'),
+    '5': ObjectId('6ae380f7c93c62a87bcebeae')
+  }
+}
+instagram_db> db.comments.insertMany([
+... {
+... comment_id: 1,
+... post_id: 101,
+... username: "aman",
+... comment: "Beautiful picture!"
+... },
+... {
+... comment_id: 2,
+... post_id: 101,
+... username: "priya",
+... comment: "Amazing!"
+... },
+...
+... {
+... comment_id: 3,
+... post_id: 103,
+... username: "simran",
+... comment: "Nice place!"
+... },
+... {
+... comment_id: 4,
+... post_id: 105,
+... username: "rahul",
+... comment: "Wonderful sunset!"
+... }
+... ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ae38108c93c62a87bcebeaf'),
+    '1': ObjectId('6ae38108c93c62a87bcebeb0'),
+    '2': ObjectId('6ae38108c93c62a87bcebeb1'),
+    '3': ObjectId('6ae38108c93c62a87bcebeb2')
+  }
+}
+instagram_db> db.users.find()
+[
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea4'),
+    user_id: 1,
+    username: 'simran',
+    name: 'Simran Kaur',
+    email: 'simran@gmail.com',
+    followers: 1200,
+    following: 350
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea5'),
+    user_id: 2,
+    username: 'aman',
+    name: 'Aman Singh',
+    email: 'aman@gmail.com',
+    followers: 850,
+    following: 420
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea6'),
+    user_id: 3,
+    username: 'priya',
+    name: 'Priya Sharma',
+    email: 'priya@gmail.com',
+    followers: 2100,
+    following: 500
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea7'),
+    user_id: 4,
+    username: 'rahul',
+    name: 'Rahul Kumar',
+    email: 'rahul@gmail.com',
+    followers: 650,
+    following: 300
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea8'),
+    user_id: 5,
+    username: 'neha',
+    name: 'Neha Verma',
+    email: 'neha@gmail.com',
+    followers: 1800,
+    following: 450
+  }
+]
+instagram_db> db.posts.find()
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebea9'),
+    post_id: 101,
+    username: 'simran',
+    caption: 'Beautiful day!',
+    hashtag: '#nature',
+    likes: 250,
+    comments: 30,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeaa'),
+    post_id: 102,
+    username: 'aman',
+    caption: 'Learning MongoDB today',
+    hashtag: '#mongodb',
+    likes: 180,
+    comments: 20,
+    location: 'Delhi'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeab'),
+    post_id: 103,
+    username: 'priya',
+    caption: 'Amazing travel experience',
+    hashtag: '#travel',
+    likes: 520,
+    comments: 75,
+    location: 'Manali'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeac'),
+    post_id: 104,
+    username: 'rahul',
+    caption: 'Big Data practical',
+    hashtag: '#bigdata',
+    likes: 150,
+    comments: 15,
+    location: 'Amritsar'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebead'),
+    post_id: 105,
+    username: 'neha',
+    caption: 'Beautiful sunset',
+    hashtag: '#nature',
+    likes: 430,
+    comments: 50,
+    location: 'Goa'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.posts.find({
+... hashtag: "#nature"
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebea9'),
+    post_id: 101,
+    username: 'simran',
+    caption: 'Beautiful day!',
+    hashtag: '#nature',
+    likes: 250,
+    comments: 30,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebead'),
+    post_id: 105,
+    username: 'neha',
+    caption: 'Beautiful sunset',
+    hashtag: '#nature',
+    likes: 430,
+    comments: 50,
+    location: 'Goa'
+  }
+]
+instagram_db> db.posts.find({
+... likes: {$gt: 300}
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeab'),
+    post_id: 103,
+    username: 'priya',
+    caption: 'Amazing travel experience',
+    hashtag: '#travel',
+    likes: 520,
+    comments: 75,
+    location: 'Manali'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebead'),
+    post_id: 105,
+    username: 'neha',
+    caption: 'Beautiful sunset',
+    hashtag: '#nature',
+    likes: 430,
+    comments: 50,
+    location: 'Goa'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.posts.find({
+... username: "simran"
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebea9'),
+    post_id: 101,
+    username: 'simran',
+    caption: 'Beautiful day!',
+    hashtag: '#nature',
+    likes: 250,
+    comments: 30,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.posts.find().sort({
+... likes: -1
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeab'),
+    post_id: 103,
+    username: 'priya',
+    caption: 'Amazing travel experience',
+    hashtag: '#travel',
+    likes: 520,
+    comments: 75,
+    location: 'Manali'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebead'),
+    post_id: 105,
+    username: 'neha',
+    caption: 'Beautiful sunset',
+    hashtag: '#nature',
+    likes: 430,
+    comments: 50,
+    location: 'Goa'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebea9'),
+    post_id: 101,
+    username: 'simran',
+    caption: 'Beautiful day!',
+    hashtag: '#nature',
+    likes: 250,
+    comments: 30,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeaa'),
+    post_id: 102,
+    username: 'aman',
+    caption: 'Learning MongoDB today',
+    hashtag: '#mongodb',
+    likes: 180,
+    comments: 20,
+    location: 'Delhi'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeac'),
+    post_id: 104,
+    username: 'rahul',
+    caption: 'Big Data practical',
+    hashtag: '#bigdata',
+    likes: 150,
+    comments: 15,
+    location: 'Amritsar'
+  }
+]
+instagram_db> db.posts.find()
+... .sort({likes: -1})
+... .limit(3)
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeab'),
+    post_id: 103,
+    username: 'priya',
+    caption: 'Amazing travel experience',
+    hashtag: '#travel',
+    likes: 520,
+    comments: 75,
+    location: 'Manali'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebead'),
+    post_id: 105,
+    username: 'neha',
+    caption: 'Beautiful sunset',
+    hashtag: '#nature',
+    likes: 430,
+    comments: 50,
+    location: 'Goa'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.users.find({
+... followers: {$gt: 1000}
+... })
+[
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea4'),
+    user_id: 1,
+    username: 'simran',
+    name: 'Simran Kaur',
+    email: 'simran@gmail.com',
+    followers: 1200,
+    following: 350
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea6'),
+    user_id: 3,
+    username: 'priya',
+    name: 'Priya Sharma',
+    email: 'priya@gmail.com',
+    followers: 2100,
+    following: 500
+  },
+  {
+    _id: ObjectId('6ae380dbc93c62a87bcebea8'),
+    user_id: 5,
+    username: 'neha',
+    name: 'Neha Verma',
+    email: 'neha@gmail.com',
+    followers: 1800,
+    following: 450
+  }
+]
+instagram_db> db.posts.updateOne(
+... {post_id: 101},
+... {$set: {likes: 300}}
+... )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+instagram_db> db.users.updateOne(
+... {username: "simran"},
+... {$inc: {followers: 100}}
+... )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+instagram_db> db.posts.createIndex({
+... hashtag: 1
+... })
+hashtag_1
+instagram_db> db.posts.createIndex({
+... username: 1
+... })
+username_1
+instagram_db> db.posts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hashtag: 1 }, name: 'hashtag_1' },
+  { v: 2, key: { username: 1 }, name: 'username_1' }
+]
+instagram_db> db.posts.find({
+... hashtag: "#mongodb"
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeaa'),
+    post_id: 102,
+    username: 'aman',
+    caption: 'Learning MongoDB today',
+    hashtag: '#mongodb',
+    likes: 180,
+    comments: 20,
+    location: 'Delhi'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.posts.find({
+... username: "simran"
+... })
+[
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebea9'),
+    post_id: 101,
+    username: 'simran',
+    caption: 'Beautiful day!',
+    hashtag: '#nature',
+    likes: 300,
+    comments: 30,
+    location: 'Chandigarh'
+  },
+  {
+    _id: ObjectId('6ae380f7c93c62a87bcebeae'),
+    post_id: 106,
+    username: 'simran',
+    caption: 'MongoDB practical work',
+    hashtag: '#mongodb',
+    likes: 320,
+    comments: 40,
+    location: 'Chandigarh'
+  }
+]
+instagram_db> db.posts.dropIndex("hashtag_1")
+{ nIndexesWas: 3, ok: 1 }
+instagram_db> db.posts.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { username: 1 }, name: 'username_1' }
+]
+instagram_db>

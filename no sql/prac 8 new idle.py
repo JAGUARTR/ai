@@ -1,0 +1,32 @@
+#python -m pip install numpy networkx
+#NumPy Vectorized Processing
+import numpy as np
+# Create two arrays
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+# Vectorized addition
+result = a + b
+
+print("Array A:", a)
+print("Array B:", b)
+print("Result:", result)
+
+#NumPy vectorized processing code:
+import numpy as np
+# Create an array of marks
+marks = np.array([45, 60, 72, 85, 90])
+# Add 5 bonus marks to all students
+new_marks = marks + 5
+# Calculate percentage
+percentage = new_marks / 100 * 100
+
+# Check which students passed
+passed = new_marks >= 50
+# Display results
+print("Original Marks:", marks)
+print("Marks after Bonus:", new_marks)
+print("Percentage:", percentage)
+print("Passed:", passed)
+# Calculate average and highest marks
+print("Average Marks:", np.mean(new_marks))
+print("Highest Marks:", np.max(new_marks))

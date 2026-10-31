@@ -1,0 +1,336 @@
+==============================================================
+PRACTICAL 6: LOUVAIN ALGORITHM USING NEO4J GRAPH DATA SCIENCE
+Step-by-step guide (Windows): Download -> Install -> Run -> Output
+==============================================================
+
+AIM
+To apply the Louvain community detection algorithm on a small
+friends graph using Neo4j Graph Data Science (GDS) and Python.
+
+
+--------------------------------------------------------------
+PART 1: INSTALL NEO4J DESKTOP
+--------------------------------------------------------------
+1. Go to:  https://neo4j.com/download
+2. Fill in the form and download "Neo4j Desktop" for Windows.
+3. Run the installer and open Neo4j Desktop.
+
+
+--------------------------------------------------------------
+PART 2: CREATE THE DATABASE INSTANCE
+--------------------------------------------------------------
+1. Click "Create" -> "New Instance" (or "Create instance").
+2. Fill in:
+     Instance name : neo4j-prac
+     Neo4j version : leave the default (latest)
+     Projects      : leave as Unassigned
+     Database user : neo4j (cannot be changed)
+     Password      : any password with 8 or more characters
+                     (WRITE IT DOWN, you need it in the code)
+3. Click "Create".
+
+
+--------------------------------------------------------------
+PART 3: INSTALL THE GRAPH DATA SCIENCE (GDS) PLUGIN
+--------------------------------------------------------------
+1. Stop the instance if it is running.
+2. Click the three dots (...) next to Connect.
+3. Open "Plugins" (or "Settings") and install
+   "Graph Data Science".
+4. Click the Start (play) button.
+5. Wait until the status shows RUNNING.
+
+VERIFY GDS:
+1. Click "Connect" -> "Query".
+2. Run this query:
+
+      RETURN gds.version()
+
+3. If a version number appears, GDS is working.
+   If you get "Unknown function gds.version", GDS is not
+   installed. Stop the instance, install the plugin again,
+   and start the instance again.
+
+
+--------------------------------------------------------------
+PART 4: INSTALL OR CHECK PYTHON
+--------------------------------------------------------------
+A. Download Python
+   1. Go to https://www.python.org/downloads/
+   2. Download the latest Python 3 for Windows.
+   3. On the FIRST installer screen, TICK:
+         "Add python.exe to PATH"
+      then click "Install Now".
+
+   Alternative (one command in Command Prompt):
+      winget install Python.Python.3.12
+
+B. Open a NEW Command Prompt
+   Press Windows key, type  cmd , press Enter.
+   (Do not use an old window opened before installing Python.
+    Do not use the terminal inside Neo4j Desktop.)
+
+C. Check the Python version
+      python --version
+   or
+      py --version
+
+D. See ALL Python versions installed on the laptop
+      py -0
+   (Important: IDLE may use a different version than pip.)
+
+
+--------------------------------------------------------------
+PART 5: INSTALL THE REQUIRED LIBRARIES (pip install)
+--------------------------------------------------------------
+Standard command:
+
+      pip install neo4j graphdatascience pandas
+
+If "pip is not recognized", use the Python launcher:
+
+      py -m pip install neo4j graphdatascience pandas
+
+Wait for the message:  Successfully installed ...
+(Yellow "not on PATH" warnings and the pip upgrade notice
+ are harmless. Ignore them.)
+
+
+--------------------------------------------------------------
+PART 6: IF PYTHON IS ALREADY INSTALLED AND UPDATED
+--------------------------------------------------------------
+Update pip itself:
+
+      py -m pip install --upgrade pip
+
+Update all the practical libraries to the latest versions:
+
+      py -m pip install --upgrade neo4j graphdatascience pandas numpy pyarrow
+
+Check what is installed:
+
+      py -m pip show neo4j graphdatascience numpy pyarrow
+
+
+--------------------------------------------------------------
+PART 7: IF PYTHON IS AN OLD VERSION
+--------------------------------------------------------------
+GDS client needs a reasonably recent Python (3.9 or newer;
+3.11 / 3.12 / 3.13 are best).
+
+Check version:
+
+      py --version
+
+If it is older than 3.9:
+1. Download and install a new Python from python.org
+   (tick "Add python.exe to PATH").
+   Or run:  winget install Python.Python.3.12
+2. Close ALL Command Prompt windows and open a new one.
+3. See the installed versions:
+
+      py -0
+
+4. Install the libraries into a SPECIFIC version
+   (replace 3.12 with the version you want):
+
+      py -3.12 -m pip install --upgrade pip
+      py -3.12 -m pip install neo4j graphdatascience pandas numpy pyarrow
+
+5. Make sure IDLE uses the SAME version:
+   Open the IDLE whose title shows that version
+   (for example "IDLE (Python 3.12)"). The version is also
+   shown at the top of the IDLE Shell window.
+
+
+--------------------------------------------------------------
+PART 8: WRITE AND RUN THE PROGRAM
+--------------------------------------------------------------
+1. Make sure the Neo4j instance shows RUNNING.
+2. Open IDLE (search "IDLE" in the Start menu).
+3. File -> New File.
+4. Paste the full code from PART 9.
+5. Change  your_password  to your Neo4j password.
+6. File -> Save, name it:  louvain_neo4j.py
+7. Press F5 to run.
+8. The output appears in the IDLE Shell window.
+   Take a screenshot for your practical.
+
+
+--------------------------------------------------------------
+PART 9: FULL PYTHON CODE
+--------------------------------------------------------------
+
+import logging
+from graphdatascience import GraphDataScience
+
+# Hide Neo4j deprecation warnings (the red text)
+logging.getLogger("neo4j").setLevel(logging.ERROR)
+logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
+
+# Step 1: Connect to Neo4j
+URI = "neo4j://127.0.0.1:7687"
+USERNAME = "neo4j"
+PASSWORD = "your_password"
+
+gds = GraphDataScience(URI, auth=(USERNAME, PASSWORD))
+print("Connected to Neo4j successfully!")
+
+# Step 2: Clear old data and any old projection
+gds.run_cypher("MATCH (n) DETACH DELETE n")
+gds.run_cypher("CALL gds.graph.drop('friends', false)")
+
+# Step 3: Create nodes and relationships
+gds.run_cypher("""
+CREATE
+(a:Person {name: 'Amit'}),
+(b:Person {name: 'Rahul'}),
+(c:Person {name: 'Priya'}),
+(d:Person {name: 'Simran'}),
+(e:Person {name: 'Karan'}),
+(f:Person {name: 'Neha'}),
+(a)-[:FRIEND]->(b),
+(a)-[:FRIEND]->(c),
+(b)-[:FRIEND]->(c),
+(d)-[:FRIEND]->(e),
+(d)-[:FRIEND]->(f),
+(e)-[:FRIEND]->(f),
+(c)-[:FRIEND]->(d)
+""")
+print("Nodes and relationships created!")
+
+# Step 4: Project the graph (UNDIRECTED is required for Louvain)
+gds.run_cypher("""
+CALL gds.graph.project(
+  'friends',
+  'Person',
+  {FRIEND: {orientation: 'UNDIRECTED'}}
+)
+""")
+print("Graph projection completed!")
+
+# Step 5: Apply Louvain
+result = gds.run_cypher("""
+CALL gds.louvain.stream('friends')
+YIELD nodeId, communityId
+RETURN gds.util.asNode(nodeId).name AS Person,
+       communityId AS Community
+ORDER BY Community, Person
+""")
+
+print("\nLouvain Community Detection Results:")
+print("Detected Communities:")
+print(result)
+
+# Step 6: Clean up
+gds.run_cypher("CALL gds.graph.drop('friends')")
+gds.close()
+print("\nLouvain algorithm executed successfully!")
+
+
+--------------------------------------------------------------
+PART 10: EXPECTED OUTPUT (IDLE SHELL)
+--------------------------------------------------------------
+Connected to Neo4j successfully!
+Nodes and relationships created!
+Graph projection completed!
+
+Louvain Community Detection Results:
+Detected Communities:
+   Person  Community
+0    Amit          1
+1   Priya          1
+2   Rahul          1
+3   Karan          5
+4    Neha          5
+5  Simran          5
+
+Louvain algorithm executed successfully!
+
+NOTE: Community numbers (1 and 5 here) are only labels and can
+be different on your run. The important result is the GROUPING:
+   Community A: Amit, Priya, Rahul
+   Community B: Karan, Neha, Simran
+
+
+--------------------------------------------------------------
+PART 11: SHOW THE GRAPH IN NEO4J (SCREENSHOT)
+--------------------------------------------------------------
+After the program has run:
+1. Neo4j Desktop -> Connect -> Query.
+2. Run:
+
+      MATCH (n)-[r]->(m) RETURN n,r,m
+
+3. You will see the 6 people and their FRIEND links.
+   Take a screenshot.
+
+
+--------------------------------------------------------------
+PART 12: TROUBLESHOOTING (ERRORS AND FIXES)
+--------------------------------------------------------------
+1. "pip is not recognized"
+   -> Open a NEW Command Prompt and use:
+        py -m pip install neo4j graphdatascience pandas
+   -> If "py" also fails, reinstall Python and tick
+      "Add python.exe to PATH".
+
+2. ModuleNotFoundError: No module named 'graphdatascience'
+   -> Libraries are installed in a different Python than IDLE.
+      Check IDLE's version at the top of the Shell, then run
+      (example for 3.12):
+        py -3.12 -m pip install neo4j graphdatascience pandas
+
+3. ImportError: pyarrow requires NumPy 2.0 or newer
+   -> Upgrade in the same Python IDLE uses (example 3.12):
+        py -3.12 -m pip install --upgrade numpy pyarrow pandas
+      Then close IDLE completely, reopen the file, press F5.
+
+4. TypeError: 'ProjectCypherEndpoints' object is not callable
+   -> Do not use gds.graph.project(...) in Python. Use the
+      Cypher version (CALL gds.graph.project...) exactly as
+      in the code in PART 9.
+
+5. Authentication failed / unauthorized
+   -> Wrong password. Fix PASSWORD in the code.
+
+6. Connection refused / Unable to retrieve routing information
+   -> The Neo4j instance is not RUNNING. Start it.
+
+7. Unknown procedure gds.xxx
+   -> GDS plugin is not installed, or the instance was not
+      restarted after installing it.
+
+8. "Graph with name friends already exists"
+   -> A previous run stopped halfway. Restart the Neo4j
+      instance (Stop, then Start) and run again.
+
+9. Red deprecation warnings
+   -> Not errors. The logging lines at the top of the code
+      hide them.
+
+
+--------------------------------------------------------------
+PART 13: EXPLANATION (FOR VIVA)
+--------------------------------------------------------------
+- Louvain is a community detection algorithm. It groups nodes
+  that are more densely connected to each other than to the
+  rest of the graph.
+- It works by optimizing a measure called MODULARITY.
+- Louvain in GDS needs an UNDIRECTED graph, so FRIEND links
+  are projected with orientation UNDIRECTED.
+- GraphDataScience(...)          : connects Python to Neo4j.
+- gds.run_cypher(...)            : runs Cypher queries from Python.
+- CALL gds.graph.project(...)    : creates an in-memory graph.
+- CALL gds.louvain.stream(...)   : runs Louvain, returns the
+                                   communityId of each node.
+- gds.graph.drop(...)            : removes the in-memory graph.
+- gds.close()                    : closes the connection.
+- Applications: social network analysis, fraud detection,
+  recommendation systems, customer segmentation.
+
+RESULT
+The Louvain algorithm successfully divided the six people into
+two communities of closely connected friends.
+
+==============================================================
