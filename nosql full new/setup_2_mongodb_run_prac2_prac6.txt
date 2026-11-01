@@ -1,0 +1,116 @@
+==========================================================
+SETUP 2 - MONGODB: RUNNING PRACTICAL 2 AND PRACTICAL 6
+==========================================================
+Do setup_1 first (MongoDB + mongosh + Database Tools installed).
+
+Code files:
+   prac2_mongodb_zipcodes.js        (Practical 2)
+   prac6_mongodb_instagram.js       (Practical 6)
+
+IMPORTANT: Two different places to type commands.
+   CMD (Command Prompt)  -> for mongoimport only
+   mongosh (shows  test>  or  zipcode_db>  prompt) -> for everything else
+
+
+==========================================================
+PRACTICAL 2 - ZIP CODE DATASET
+==========================================================
+
+STEP 1: Get zips.json
+-------------------
+Download:  http://media.mongodb.org/zips.json
+Save it in a simple folder, for example:  C:\mongo_data\zips.json
+
+If the link does not open (it is an old link and may be dead), search
+Google for "zips.json mongodb" and download the file from a mirror
+(GitHub copies exist). Right-click -> Save as. Make sure the saved file
+is named exactly  zips.json  and not  zips.json.txt .
+
+STEP 2: Import (in CMD, NOT mongosh)
+-------------------
+   cd C:\mongo_data
+   mongoimport --db zipcode_db --collection zipcodes --file zips.json
+
+Success message looks like:
+   29353 document(s) imported successfully. 0 document(s) failed to import.
+
+(If it says "mongoimport is not recognized" -> setup_1 Step 3 and Step 4.)
+
+If you import twice you get duplicate-key errors. That is harmless because
+_id already exists. To start fresh, in mongosh:
+   use zipcode_db
+   db.zipcodes.drop()
+then import again.
+
+STEP 3: Open mongosh
+-------------------
+   mongosh
+
+STEP 4: Run the queries
+-------------------
+Open prac2_mongodb_zipcodes.js in Notepad / VS Code. Copy one block at a
+time (blocks are separated by blank lines), paste in mongosh and press Enter.
+
+Order:
+   use zipcode_db
+   db.zipcodes.countDocuments()      -> shows total documents
+   A1 BOSTON states
+   A2 cities containing BOST
+   B  city with most zip codes per state, ranked by population
+   C  spatial info (loc field)
+   C2 nearest zip codes (spatial query)
+
+Tips:
+   - If mongosh pauses with "Type "it" for more", type  it  and Enter.
+   - Pasting a multi-line block is fine. mongosh waits until brackets close.
+   - "use zipcode_db" must be typed before the db.zipcodes... commands.
+
+Check data is there:
+   show dbs
+   use zipcode_db
+   show collections
+   db.zipcodes.findOne()
+
+
+==========================================================
+PRACTICAL 6 - INSTAGRAM DATABASE
+==========================================================
+No file download or import needed. Data is created by the script.
+
+STEP 1: Open mongosh
+   mongosh
+
+STEP 2: Copy blocks from prac6_mongodb_instagram.js and paste in mongosh
+Go in order:
+   use instagram_db
+   users insertMany
+   posts insertMany
+   comments insertMany
+   then the find / sort / update / index commands one by one.
+
+Each insertMany prints  acknowledged: true  and the inserted ids.
+
+Run the insert commands ONLY ONCE. Running them twice adds duplicate
+records (the data has no unique key). To reset and start over:
+   use instagram_db
+   db.dropDatabase()
+
+Index part - what you should see:
+   createIndex  -> returns the index name (hashtag_1, username_1)
+   getIndexes() -> shows _id_, hashtag_1, username_1
+   dropIndex("hashtag_1") then getIndexes() -> hashtag_1 is gone
+
+Note: the update on post_id 101 changes likes from 250 to 300, and the
+simran follower count goes 1200 -> 1300. Later queries reflect those changes.
+
+
+==========================================================
+USING COMPASS INSTEAD (optional, good for screenshots)
+==========================================================
+1. Open Compass, connect to  mongodb://localhost:27017
+2. Left side shows databases: zipcode_db, instagram_db.
+3. Click a collection to see documents.
+4. For aggregation, open the collection -> "Aggregations" tab.
+5. Or use the ">_MONGOSH" bar at the bottom and paste commands there.
+
+Compass screenshots of the data are good proof for your practical file.

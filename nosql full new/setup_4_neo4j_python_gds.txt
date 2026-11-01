@@ -1,0 +1,181 @@
+==========================================================
+SETUP 4 - NEO4J + PYTHON + GRAPH DATA SCIENCE (Practical 6 Louvain)
+==========================================================
+Code file: prac6_neo4j_louvain.py
+
+You need:
+   1. Python
+   2. Neo4j Desktop (database) with the Graph Data Science (GDS) plugin
+   3. Python packages: neo4j, graphdatascience, pandas
+
+
+==========================================================
+PART A. INSTALL PYTHON (NEW PC)
+==========================================================
+1. https://www.python.org/downloads/  -> Download the latest Python 3 (3.10 to 3.12
+   all work for these packages).
+2. Run the installer.
+   VERY IMPORTANT: tick  "Add python.exe to PATH"  at the bottom of the
+   first screen. Then click "Install Now".
+3. Verify in a NEW CMD:
+      python --version
+      pip --version
+   If "python is not recognized", try:
+      py --version
+   (then use  py  instead of  python  everywhere), or reinstall and tick
+   the PATH box.
+
+IDLE is installed with Python (Start menu -> IDLE). You can open the .py
+file in IDLE and press F5 to run. IDLE uses the same Python that pip
+installs into, so packages you pip-install are available.
+
+Optional - if pip is outdated:
+      python -m pip install --upgrade pip
+
+
+==========================================================
+PART B. INSTALL NEO4J DESKTOP
+==========================================================
+1. https://neo4j.com/download/  -> Download Neo4j Desktop for Windows.
+   (A form asks for name/email. An activation key may be shown or emailed;
+   paste it if the app asks.)
+2. Install and open Neo4j Desktop.
+
+3. Create a database instance:
+      New / Create instance
+      Name     : practical6   (any name)
+      Username : neo4j        (fixed default, you do not choose this)
+      Password : choose one, minimum 8 characters. WRITE IT DOWN.
+      Version  : latest 5.x
+   Click Create.
+
+4. Install the Graph Data Science plugin:
+      Click your instance -> Plugins tab
+      -> "Graph Data Science Library" -> Install
+   Wait until it shows installed.
+
+5. Start the instance (Start button). Wait until status = Running.
+   If the plugin was installed while running, Stop and Start once.
+
+6. Verify GDS works. Click Open (Neo4j Browser) and run:
+      RETURN gds.version();
+   A version number (like 2.x.x) = success.
+   Error "Unknown function gds.version" = plugin not installed or instance
+   not restarted.
+
+Browser address (info only): http://localhost:7474
+
+
+==========================================================
+PART C. USERNAME / LINK / PASSWORD - WHAT CHANGES
+==========================================================
+In prac6_neo4j_louvain.py:
+
+   URI      = "bolt://localhost:7687"
+   USERNAME = "neo4j"
+   PASSWORD = "your_password"
+
+URI       Stays bolt://localhost:7687 on your laptop and on a new PC, as
+          long as Neo4j runs locally with the default port.
+          Change it only if Desktop shows a different Bolt port for your
+          instance (for example 7688 when two instances run, or if the
+          port was changed). Check: instance details / settings.
+          neo4j://localhost:7687 also works.
+USERNAME  Stays  neo4j .
+PASSWORD  CHANGES. It is the password YOU set when creating the instance.
+          New PC or new instance = new password. Replace "your_password"
+          with it, keeping the quotes.
+          Keep the instance Running while the Python script runs.
+
+There is no .env file in this practical. Credentials are typed directly
+into the script.
+
+
+==========================================================
+PART D. INSTALL PYTHON PACKAGES
+==========================================================
+Open a NEW CMD (normal, not Python shell) and run:
+
+      pip install neo4j
+      pip install graphdatascience
+      pip install pandas
+
+Or in one line:
+      pip install neo4j graphdatascience pandas
+
+For the other practicals (8 and 9):
+      pip install numpy networkx
+
+Verify:
+      pip show graphdatascience
+      python -c "import graphdatascience, neo4j, pandas; print('all good')"
+
+If pip is not recognized:   python -m pip install neo4j graphdatascience pandas
+If using the py launcher:   py -m pip install neo4j graphdatascience pandas
+
+Version note: the graphdatascience Python package must be compatible with
+the GDS plugin version in Neo4j. If you get a compatibility error, upgrade
+the package:
+      pip install --upgrade graphdatascience
+and/or update the GDS plugin in Neo4j Desktop.
+
+
+==========================================================
+PART E. RUN THE PRACTICAL
+==========================================================
+1. Neo4j instance = Running.
+2. Open prac6_neo4j_louvain.py in IDLE or Notepad.
+   Change PASSWORD = "your_password" to your real password. Save.
+3. In CMD:
+      cd C:\path\to\the\folder
+      python prac6_neo4j_louvain.py
+   (or IDLE -> Run -> Run Module / F5)
+
+Expected output (community numbers may differ):
+      Connected to Neo4j successfully!
+      Nodes and relationships created!
+      Graph projection completed!
+      Louvain Community Detection Results:
+         Person   communityId
+         ...      ...
+      Louvain algorithm executed successfully!
+
+Expected grouping: Amit, Rahul, Priya together; Simran, Karan, Neha
+together. The community id numbers themselves are arbitrary, only the
+grouping matters.
+
+The script first deletes all existing nodes (MATCH (n) DETACH DELETE n),
+so use a practice instance, not one holding other data.
+
+See the graph visually in Neo4j Browser:
+      MATCH (n:Person)-[r:FRIEND]->(m) RETURN n, r, m
+
+
+==========================================================
+PART F. COMMON ERRORS
+==========================================================
+AuthError / "unauthorized"
+   -> Wrong PASSWORD in the script.
+
+ServiceUnavailable / "Unable to retrieve routing information" / refused
+   -> Instance is not Running, or the port in URI is wrong.
+
+"Unknown function gds.version" / "no procedure with name gds..."
+   -> GDS plugin not installed, or instance not restarted after install.
+
+ModuleNotFoundError: No module named 'graphdatascience'
+   -> pip installed into a different Python. Use the same python for both:
+      python -m pip install graphdatascience
+      python prac6_neo4j_louvain.py
+
+Graph projection error "graph already exists"
+   -> The script drops the old projection automatically. If it still
+      appears, run in Neo4j Browser:
+      CALL gds.graph.drop('socialGraph');
+
+Windows: SSL / certificate warnings with bolt://
+   -> bolt://localhost:7687 over local Desktop needs no certificate.
+      Do not change it to bolt+s.
+
+Neo4j Aura (cloud) free tier does not include the GDS plugin, so use
+Neo4j Desktop for this practical.

@@ -1,0 +1,254 @@
+==========================================================
+SETUP 3 - CASSANDRA ON WINDOWS (Practical 3)
+==========================================================
+Code file: prac3_cassandra_cars.cql
+
+BEFORE YOU START - READ THIS
+----------------------------
+Apache Cassandra 4.x and 5.x do not officially support Windows, and their
+download no longer includes Windows scripts. The old method is Cassandra
+3.11 (which has cassandra.bat and needs Java 8). With 5.x, people get it
+working by editing the scripts or by using Docker/WSL. This file covers
+the standard steps, the common script/path fixes, and Docker as a backup
+that works every time.
+
+The exact edits you made on your own laptop earlier are not visible to me
+here. If your edited .bat differs from what is below, trust your working
+copy and note the differences.
+
+
+==========================================================
+PART A. INSTALL JAVA
+==========================================================
+1. Download JDK 17 (Temurin): https://adoptium.net  -> Windows x64 .msi
+   (For Cassandra 3.11 you would need JDK 8 instead.)
+2. In the installer, enable these options:
+      "Set JAVA_HOME variable"
+      "Add to PATH"
+3. Verify in a NEW CMD:
+      java -version
+      echo %JAVA_HOME%
+
+If JAVA_HOME is blank, set it yourself:
+   Win key -> "Edit the system environment variables" -> Environment Variables
+   System variables -> New
+      Variable name : JAVA_HOME
+      Variable value: C:\Program Files\Eclipse Adoptium\jdk-17.0.x-hotspot
+   (copy the real folder path from File Explorer)
+   Then edit Path -> New -> %JAVA_HOME%\bin
+
+
+==========================================================
+PART B. DOWNLOAD AND EXTRACT CASSANDRA
+==========================================================
+1. https://cassandra.apache.org/_/download.html
+   Download the binary (the file is usually .tar.gz).
+2. Extract using 7-Zip or WinRAR. A tar.gz may need two extractions
+   (first .gz -> .tar, then .tar -> folder).
+3. Move/rename so that the folders sit directly here:
+
+      C:\cassandra\bin
+      C:\cassandra\conf
+      C:\cassandra\lib
+      C:\cassandra\data   (created on first start)
+
+   COMMON MISTAKE: a nested folder like
+   C:\cassandra\apache-cassandra-5.0.x\bin
+   Open C:\cassandra and check bin is right there. If not, move everything
+   up one level.
+
+4. Environment variables (same screen as above):
+      New system variable:
+         CASSANDRA_HOME = C:\cassandra
+      Edit Path -> New:
+         C:\cassandra\bin
+
+5. Close all CMD windows. Open a new CMD to use them.
+
+
+==========================================================
+PART C. BACKUP BEFORE EDITING (.bak)
+==========================================================
+Always make a backup copy of a file before you edit it. If something breaks,
+you copy it back.
+
+   cd C:\cassandra\bin
+   copy cassandra.bat cassandra.bat.bak
+   cd C:\cassandra\conf
+   copy cassandra.yaml cassandra.yaml.bak
+
+Restore if needed:
+   copy cassandra.bat.bak cassandra.bat
+
+Edit files with Notepad opened as Administrator (or VS Code), because
+C:\cassandra is a protected area if it sits under Program Files.
+
+
+==========================================================
+PART D. START CASSANDRA
+==========================================================
+1. Open CMD as Administrator
+   (Start -> type cmd -> right-click -> Run as administrator)
+
+2. Run, line by line:
+
+      set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.x-hotspot
+      set CASSANDRA_HOME=C:\cassandra
+      cd /d C:\cassandra\bin
+      cassandra.bat -f
+
+   (Replace the JAVA_HOME path with your real one. If JAVA_HOME is already
+   set permanently, the first line is not needed.)
+
+3. KEEP THIS WINDOW OPEN. Wait one or two minutes until you see a line like:
+
+      Starting listening for CQL clients on localhost/127.0.0.1:9042
+
+   Do not type in this window. Closing it stops Cassandra.
+   To stop Cassandra normally: press Ctrl + C in this window.
+
+Optional - one-click start script. Save as C:\cassandra\start_cassandra.bat:
+
+      @echo off
+      set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.x-hotspot
+      set CASSANDRA_HOME=C:\cassandra
+      cd /d C:\cassandra\bin
+      cassandra.bat -f
+
+Right-click it -> Run as administrator.
+
+If the Windows Firewall pops up, click "Allow access".
+
+
+==========================================================
+PART E. OPEN CQLSH (SECOND CMD WINDOW)
+==========================================================
+Cassandra window stays running. Open a SECOND, normal CMD:
+
+      cd /d C:\cassandra\bin
+      cqlsh
+
+Expected:
+      Connected to Test Cluster at 127.0.0.1:9042
+      [cqlsh 6.x.x | Cassandra 5.x.x | CQL spec 3.4.x | Native protocol v5]
+      cqlsh>
+
+cqlsh needs Python. It is a Python program that uses driver files from
+C:\cassandra\lib (the .zip files there, e.g. cassandra-driver-internal-only).
+
+   If "cqlsh is not recognized":
+      python cqlsh.py
+   (run from C:\cassandra\bin). If python itself is not recognized, install
+   Python from python.org and tick "Add python.exe to PATH".
+
+   If you get an error that mentions "asyncore" or "asynchat":
+      Python is too new (3.12+) for that cqlsh. Install Python 3.11 and run:
+      py -3.11 cqlsh.py
+
+   If you get "No module named cassandra" or "No module named six":
+      pip install cassandra-driver six
+
+   If cqlsh says "Connection refused" / "Unable to connect":
+      Cassandra is not finished starting. Wait for the 9042 line in
+      window 1, then retry.
+
+Explicit connection:
+      cqlsh 127.0.0.1 9042
+
+There is no username/password by default. On a new PC it is the same:
+127.0.0.1, port 9042, no login.
+
+
+==========================================================
+PART F. RUN THE PRACTICAL
+==========================================================
+Method 1 (recommended): paste blocks
+   Open prac3_cassandra_cars.cql, copy block by block, paste in cqlsh.
+
+Method 2: run the whole file
+   cqlsh> SOURCE 'C:/Users/YourName/Desktop/prac3_cassandra_cars.cql';
+   (use forward slashes and quotes)
+
+Order:
+   CREATE KEYSPACE -> USE car_db -> CREATE TABLE -> 5 INSERTs ->
+   SELECT * FROM cars -> CONSISTENCY ONE / QUORUM / ALL, each followed
+   by SELECT * FROM cars.
+
+Why QUORUM and ALL work on one node:
+   With replication_factor 1 there is only one copy, so ONE, QUORUM and ALL
+   all need just that one node. You see the same result each time. That is
+   expected. The lines are commented in the .cql file for the 3-node part.
+
+Exit cqlsh:   exit
+
+
+==========================================================
+PART G. REPLICATION DEMO WITH 3 NODES (DOCKER)
+==========================================================
+Real replication needs 3 nodes. Easiest on a laptop is Docker Desktop.
+
+1. Install Docker Desktop for Windows (needs WSL2, the installer guides you).
+   Check:  docker --version
+
+2. In CMD, one line at a time. Wait about a minute between nodes:
+
+   docker network create cass-net
+
+   docker run -d --name cass1 --network cass-net cassandra:5.0
+
+   docker run -d --name cass2 --network cass-net -e CASSANDRA_SEEDS=cass1 cassandra:5.0
+
+   docker run -d --name cass3 --network cass-net -e CASSANDRA_SEEDS=cass1 cassandra:5.0
+
+3. Check all 3 nodes (UN = Up/Normal):
+   docker exec -it cass1 nodetool status
+
+4. Open cqlsh and create a replicated keyspace:
+   docker exec -it cass1 cqlsh
+
+   CREATE KEYSPACE car_db3 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 3};
+   USE car_db3;
+   CREATE TABLE cars (car_id int PRIMARY KEY, manufacturer text, type text, max_performance int, max_torque int);
+   INSERT INTO cars (car_id, manufacturer, type, max_performance, max_torque) VALUES (101, 'Toyota', 'Sedan', 203, 243);
+   SELECT * FROM cars;
+
+5. See which nodes hold the copies (3 IP addresses = 3 replicas):
+   docker exec -it cass1 nodetool getendpoints car_db3 cars 101
+
+6. Show consistency in action: stop one node
+   docker stop cass3
+   docker exec -it cass1 cqlsh
+   USE car_db3;
+   CONSISTENCY QUORUM;
+   SELECT * FROM cars;        -> works (2 of 3 nodes are enough)
+   CONSISTENCY ALL;
+   SELECT * FROM cars;        -> fails (needs all 3 nodes)
+
+   Restart the node:  docker start cass3
+
+Clean up when done:
+   docker rm -f cass1 cass2 cass3
+   docker network rm cass-net
+
+If Docker is not possible on your laptop, show the single-node practical
+and explain replication with the diagram from the practical text.
+
+
+==========================================================
+QUICK PROBLEM LIST
+==========================================================
+"JAVA_HOME is not set"      -> Part A, set it, open a NEW CMD.
+"Access is denied"          -> Open CMD as Administrator.
+"cassandra.bat not found"   -> Cassandra 4/5 has no Windows script. Use
+                               your edited bat from earlier, Cassandra 3.11
+                               with JDK 8, or Docker (Part G, one node:
+                               docker run -d --name cass -p 9042:9042 cassandra:5.0
+                               then: docker exec -it cass cqlsh).
+PowerShell script blocked   -> In PowerShell as admin:
+                               Set-ExecutionPolicy RemoteSigned
+Java version error          -> Check java -version matches what your
+                               Cassandra version needs (17 for 5.0).
+Port 9042 already in use    -> Another Cassandra is running. Close it.
+Corrupt start after crash   -> Stop Cassandra, delete contents of
+                               C:\cassandra\data and start again
+                               (this erases your tables).

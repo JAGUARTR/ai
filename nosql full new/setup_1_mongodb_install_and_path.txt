@@ -1,0 +1,141 @@
+==========================================================
+SETUP 1 - MONGODB: INSTALL + PATH / ENVIRONMENT SETUP
+(for Practical 2 and Practical 6, Windows laptop or new PC)
+==========================================================
+
+You need FOUR things for MongoDB on Windows:
+
+  1. MongoDB Community Server   (the database, runs as a Windows service)
+  2. mongosh                    (the shell where you type db.xxx commands)
+  3. MongoDB Database Tools     (gives mongoimport, needed for Practical 2)
+  4. MongoDB Compass (optional) (GUI, also has a built-in shell)
+
+mongosh and Database Tools are SEPARATE downloads. The server installer
+does not give you mongoimport.
+
+
+----------------------------------------------------------
+STEP 1: INSTALL MONGODB COMMUNITY SERVER
+----------------------------------------------------------
+1. Open: https://www.mongodb.com/try/download/community
+2. Platform: Windows x64, Package: msi. Click Download.
+3. Run the .msi
+   - Choose "Complete"
+   - Keep "Install MongoD as a Service" ticked (default settings are fine)
+   - Keep "Install MongoDB Compass" ticked (optional but useful)
+4. Finish.
+
+MongoDB now starts automatically in the background every time Windows starts.
+
+Check it is running:
+   Press Win + R, type  services.msc , press Enter.
+   Find "MongoDB Server" -> Status should be "Running".
+
+If not running, open CMD as Administrator and type:
+   net start MongoDB
+
+
+----------------------------------------------------------
+STEP 2: INSTALL MONGOSH
+----------------------------------------------------------
+1. Open: https://www.mongodb.com/try/download/shell
+2. Platform: Windows x64, Package: msi. Download and install.
+3. The msi normally adds mongosh to PATH automatically.
+
+(If you skip this, Compass has a ">_MONGOSH" tab at the bottom that works
+the same way.)
+
+
+----------------------------------------------------------
+STEP 3: INSTALL DATABASE TOOLS (for mongoimport)
+----------------------------------------------------------
+1. Open: https://www.mongodb.com/try/download/database-tools
+2. Windows x64. Download the msi (easiest) or zip.
+3. msi: next, next, finish.
+   zip: extract to  C:\mongodb-tools  and add its  bin  folder to PATH
+        (see Step 4).
+
+
+----------------------------------------------------------
+STEP 4: ADD TO PATH (ENVIRONMENT VARIABLE) - only if a command is
+        "not recognized"
+----------------------------------------------------------
+1. Press the Windows key, type:  environment variables
+   Click "Edit the system environment variables".
+2. Click "Environment Variables..." button.
+3. Under "System variables" select  Path  -> click Edit.
+4. Click New and paste the folder, one per line. Typical folders:
+
+   mongosh:
+   C:\Users\<YourName>\AppData\Local\Programs\mongosh\
+
+   Database Tools (msi install):
+   C:\Program Files\MongoDB\Tools\100\bin
+
+   Database Tools (zip you extracted):
+   C:\mongodb-tools\bin
+
+   MongoDB server (only needed if you want to run mongod yourself):
+   C:\Program Files\MongoDB\Server\8.0\bin
+   (the number 8.0 is your installed version - check the folder name)
+
+5. Click OK, OK, OK.
+6. CLOSE every CMD window and open a NEW one (old windows keep the old PATH).
+
+To find the real folder: open File Explorer and look inside
+C:\Program Files\MongoDB\ and C:\Users\<YourName>\AppData\Local\Programs\.
+Folder names differ with version, so copy the real one from the address bar.
+
+
+----------------------------------------------------------
+STEP 5: VERIFY (open a NEW CMD)
+----------------------------------------------------------
+   mongosh --version
+   mongoimport --version
+
+Both must print a version number.
+
+Then test the connection:
+   mongosh
+
+You should see something like:
+   Connecting to: mongodb://127.0.0.1:27017/...
+   test>
+
+Type  exit  to leave.
+
+
+----------------------------------------------------------
+CONNECTION DETAILS (username / password / link)
+----------------------------------------------------------
+Link  : mongodb://localhost:27017
+        (same on every PC. 27017 is the default port)
+User  : none
+Pass  : none
+        A fresh local MongoDB has authentication OFF, so you do not create
+        any username or password. On a new PC you just install and connect.
+
+There is NO .env file needed for these practicals. "Environment setup"
+here only means the PATH entries in Step 4.
+
+In Compass: paste  mongodb://localhost:27017  -> Connect.
+
+
+----------------------------------------------------------
+IF SOMETHING GOES WRONG
+----------------------------------------------------------
+"mongosh is not recognized"
+   -> Step 4 PATH not added, or you did not open a NEW CMD.
+
+"mongoimport is not recognized"
+   -> Database Tools not installed, or its bin folder is not in PATH.
+
+"connect ECONNREFUSED 127.0.0.1:27017"
+   -> MongoDB service is not running. Run:  net start MongoDB  (as admin)
+
+Service will not start (rare) - run MongoDB manually instead:
+   mkdir C:\data\db
+   "C:\Program Files\MongoDB\Server\8.0\bin\mongod.exe" --dbpath C:\data\db
+   Keep that window open, use mongosh in another window.
+
+Next: read  setup_2_mongodb_run_prac2_prac6.txt
