@@ -1,0 +1,157 @@
+OSV LINUX PRACTICALS - SETUP STEPS ONLY (no full code)
+=====================================================
+
+NANO BASICS (all practicals)
+----------------------------
+Open terminal ........ Ctrl + Alt + T
+Save ................. Ctrl + O, then Enter
+Exit nano ............ Ctrl + X
+Delete a line ........ Ctrl + K
+Delete to end of file  Alt + T  (go to top first with Alt + \ )
+
+NOTE: chmod +x does NOT compile anything. It only makes a shell script
+executable. Only C programs are compiled, using gcc.
+
+
+=====================================================
+PRACTICAL 1 - BASIC LINUX COMMANDS
+=====================================================
+No script. Open terminal and type one by one, in this order:
+
+  pwd
+  ls
+  ls -l
+  mkdir OS_Practical
+  cd OS_Practical
+  touch file1.txt
+  echo "Operating Systems Practical" > file1.txt
+  cat file1.txt
+  cp file1.txt backup.txt
+  mv backup.txt newfile.txt
+  rm newfile.txt
+  stat file1.txt
+  chmod +x file1.txt
+  ls -l
+  date
+  whoami
+  uname -a
+  ps
+  top            (press q to exit)
+  find . -name "*.txt"
+  wc file1.txt
+  history
+
+Spacing: one space between command and each argument.
+  echo "text" > file1.txt   (space after echo, space around >)
+  cp file1.txt backup.txt   (spaces between all 3 parts)
+
+
+=====================================================
+PRACTICAL 2 - SHELL PROGRAMMING
+=====================================================
+Steps:
+  1. Ctrl + Alt + T
+  2. nano script.sh
+  3. Type the program, Ctrl + O, Enter, Ctrl + X
+  4. chmod +x script.sh
+  5. ./script.sh
+
+For each new program: nano script.sh again, delete old code, type new
+code, save, exit, then just ./script.sh (chmod only needed once).
+Or use a new name each time: nano even.sh -> chmod +x even.sh -> ./even.sh
+
+SPACING RULES (most errors come from these)
+  - echo "Hello"            space after echo
+  - read name               space after read
+  - #!/bin/bash             first line, NO space after #!
+  - i=1   sum=0   i=$((i+1))   NO spaces around =
+  - if [ $a -gt $b ]        space after [ , before ] , and around -gt
+  - [ "$user" = "admin" ]   spaces around = inside [ ]
+  - [ "$user" = "admin" ] && [ "$pass" = "1234" ]
+  - then / do               write on a NEW line
+  - End with fi / done / esac
+  - $((n % 2))              spaces are fine inside $(( ))
+  - case: each option ends with ;;   and block ends with esac
+  - ./script.sh             no space between ./ and name
+
+
+=====================================================
+PRACTICAL 3 - fork() (A fork, B orphan, C zombie)
+=====================================================
+ONE-TIME INSTALL (needs internet):
+  1. sudo apt update
+  2. sudo apt install build-essential
+  3. gcc --version            (to verify)
+
+A) FORK
+  1. nano fork.c
+  2. Type program, Ctrl + O, Enter, Ctrl + X
+  3. gcc fork.c -o fork
+  4. ./fork
+
+B) ORPHAN
+  1. nano orphan.c
+  2. gcc orphan.c -o orphan
+  3. ./orphan
+
+C) ZOMBIE
+  1. nano zombie.c
+  2. gcc zombie.c -o zombie
+  3. ./zombie
+  4. QUICKLY open a second terminal: Ctrl + Shift + T
+     (parent sleeps only 15 seconds)
+  5. In second terminal: ps -el | grep Z
+
+SPACING / TYPING RULES FOR C
+  - gcc fork.c -o fork      spaces between every part; name after -o
+                            is the output file
+  - ./fork                  no space between ./ and name
+  - #include <stdio.h>      space after include
+  - Write printf, NOT the PDF's special character. Copying from the PDF
+    turns "tf" into one symbol (and "ti" in words like "creation").
+    Type by hand or fix after pasting, otherwise gcc gives errors.
+  - Every statement ends with ;
+  - Every { must have a matching }
+  - Needs: #include <stdio.h>, <unistd.h>, and <stdlib.h> (for exit)
+
+
+=====================================================
+PRACTICAL 6 - PTHREAD
+=====================================================
+  1. nano search.c
+  2. Type program, Ctrl + O, Enter, Ctrl + X
+  3. gcc search.c -o search -pthread
+  4. ./search
+
+  - -pthread is MANDATORY. Without it: "undefined reference to
+    pthread_create".
+  - Space before -pthread. Do not write "- pthread".
+  - -lpthread also works, but stick to -pthread.
+  - Use printf, not the PDF's special character.
+
+
+=====================================================
+PRACTICAL 9 & 10 - VM VERIFICATION (inside Ubuntu VM)
+=====================================================
+Open terminal (Ctrl + Alt + T) and run each, screenshot each output:
+
+  lscpu         CPU info
+  free -h       RAM (total, used, free)
+  uname -a      kernel / system info
+  df -h         disk space
+  ip addr       network info
+
+Screenshots to take for the journal:
+  - VM configuration screen
+  - Install progress
+  - Final Ubuntu desktop
+  - Output of each command above
+
+
+=====================================================
+PYTHON PRACTICALS (4, 5, 7, 8) - run on Windows, no VM needed
+=====================================================
+  - Save as name.py, open in IDLE, press F5 to run.
+  - Indentation matters: keep 4 spaces inside for/if/while.
+  - Practical 5 asks for input: Process number, then 3 values separated
+    by spaces (example: 1 1 0 2).
